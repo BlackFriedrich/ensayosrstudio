@@ -1,0 +1,74 @@
+---
+title: "Intersectar capas SHP"
+author: "Federico Córdoba"
+date: "2024-07-28"
+output: html_document
+---
+
+
+### llamamos a las librerias
+
+```{r}
+library(sf)
+library(mapview)
+library(dplyr)
+```
+
+### llamamos la información del entorno ... se carga como valor
+
+```{r}
+baseurl <- "http://vport.herrera.unt.edu.ar:8894/geoserver/wfs?"
+wfs_request <- "request=GetFeature&service=WFS&version=2.0.0&typeName=espacio01:tuc_juris&outputFormat=application/json"
+
+fi_regions_wfs <- paste0(baseurl,wfs_request)
+```
+
+
+### creamos una tabla a partir de esos valores...
+(data frame y sf , xq contiene a demas datos espaciales)
+
+```{r}
+fi_regions <- st_read(fi_regions_wfs)
+```
+### revisamos la estructura del archivo ... para encontrar la columna que queremos considerar
+
+su estructura
+
+```{r}
+str(fi_regions)
+```
+la columna que nos interesa
+
+```{r}
+sort(unique(fi_regions$juris))
+```
+
+### creamos la Data de la jurisdicción (unidad) q nos interesa ...
+
+```{r}
+jurisdiccion <- fi_regions %>% 
+  filter(juris == "MUN. DE FAMAILLA")
+```
+
+### creamos la visualización con el objeto utilizando mapview
+
+```{r}
+mapview(jurisdiccion, label = jurisdiccion$name, color = "darkgreen", col.regions = "green", alpha.regions = .05)
+```
+
+### Traemos las capas que deseamos interceptar
+
+```{r}
+baseurlparcelas <- "http://190.221.181.227/geoserver/dgct/wfs"
+wfs_reqparcelas <- paste0("?", "request=GetFeature&service=WFS&version=2.0.0&typeName=dgct:rios&outputFormat=application/json")
+
+fi_regions_wfs_parcelas <- paste0(baseurlparcelas, wfs_reqparcelas)
+
+fi_regions_parcelas <- st_read(fi_regions_wfs_parcelas)
+```
+
+### Interceptamos con la unidad
+
+```{r}
+parcelas_recortadas <- st_intersection(fi_regions_wfs_parcelas, jurisdiccion)
+```

@@ -4,16 +4,72 @@ author: "Federico Córdoba"
 date: "2024-07-28"
 output: html_document
 ---
+Fuente: [artículo online](https://twiav.nl/en/WFS_R.php)
 
-llamamos a las librerias
+
+# Código
+
+```{r}
+library(sf)
+library(tidyverse)
+library(mapview)
+```
+```{r}
+library(httr)
+```
+
+library(httr)
+
+# Hacer la solicitud WFS
+response <- GET(fi_regions_wfs)
+
+# Ver el código de estado de la respuesta
+status_code(response)
+
+# Ver el contenido de la respuesta
+content(response, "text")
+
+
+
+
+
+
+
+
+
+```{r}
+baseurl <- "http://190.221.181.227/geoserver/dgct/wfs?"
+wfs_request <- "request=GetFeature&service=WFS&version=2.0.0&typeName=dgct:parcelas&outputFormat=application/json"
+
+fi_regions_wfs <- paste0(baseurl, wfs_request)
+```
+
+```{r}
+fi_regions <- st_read(fi_regions_wfs)
+```
+```{r}
+mapview(fi_regions, label = fi_regions$name, color = "darkgreen", col.regions = "green", alpha.regions = .05)
+```
+
+# Explicación
+
+Con gusto te explico el código!
+
+## Cargando las librerías necesarias
 
 ```{r}
 library(sf)
 library(mapview)
-library(dplyr)
 ```
 
-llamamos la información... se carga como valor
+library(sf): 
+Esta línea carga la librería sf, que es fundamental para trabajar con datos espaciales en R. sf nos permite leer, manipular y analizar datos geográficos de manera eficiente.
+
+library(mapview):
+Cargamos la librería mapview para crear mapas interactivos de manera sencilla. Con esta librería, podremos visualizar nuestros datos espaciales en un mapa web.
+Construyendo la URL del servicio WFS
+
+## Importación del WFS (Localización+Ubicación+unión de la solicitud)
 
 ```{r}
 baseurl <- "http://vport.herrera.unt.edu.ar:8894/geoserver/wfs?"
@@ -22,55 +78,56 @@ wfs_request <- "request=GetFeature&service=WFS&version=2.0.0&typeName=espacio01:
 fi_regions_wfs <- paste0(baseurl,wfs_request)
 ```
 
+baseurl: 
+Aquí se define la dirección base del servidor WFS. Un servidor WFS (Web Feature Service) es un servicio web que permite acceder a datos geográficos en formato vectorial.
 
-creamos una tabla a partir de esos valores...
-(data frame y sf , xq contiene a demas datos espaciales)
+wfs_request: 
+Esta parte especifica la solicitud que se le hará al servidor WFS. 
+En este caso, estamos solicitando un conjunto de características separados por & 
+    *request=GetFeature*: Indica que se solicita obtener datos de una capa (feature) del servicio WFS.
+    *service=WFS*: Especifica que se trata de un servicio WFS.
+    *version=2.0.0*: Define la versión del servicio WFS que se está utilizando (en este caso, la versión 2.0.0).
+    *typeName=espacio01:tuc_juris*: Define el nombre completo de la capa que se desea descargar. ("espacio01:tuc_juris")
+    *outputFormat=application/json*: Indica que se desea recibir los datos en formato JSON.
+
+fi_regions_wfs: 
+Finalmente, se combina la dirección base con la solicitud para formar la URL completa del servicio WFS.
+
+## Leyendo los datos del servicio WFS (crea un archivo sf, a partir de la solicitud)
 
 ```{r}
 fi_regions <- st_read(fi_regions_wfs)
 ```
-revisamos la estructura del archivo ... para encontrar la columna que queremos considerar
 
-su estructura
+st_read(fi_regions_wfs): 
+Esta función de la librería sf se utiliza para leer los datos espaciales desde la URL del servicio WFS. Los datos se leen y se almacenan en un objeto de tipo sf, que es la forma estándar en R para representar datos espaciales.
 
-```{r}
-str(fi_regions)
-```
-la columna que nos interesa
+## Visualizando los datos en un mapa
 
 ```{r}
-sort(unique(fi_regions$juris))
+mapview(fi_regions, label = fi_regions$name, color = "darkgreen", col.regions = "green", alpha.regions = .05)
 ```
 
-creamos la Data de la jurisdicción q nos interesa ...
-
-```{r}
-jurisdiccion <- fi_regions %>% 
-  filter(juris == "MUN. DE FAMAILLA")
-```
-
-creamos la visualización con el objeto utilizando mapview
-
-```{r}
-mapview(jurisdiccion, label = jurisdiccion$name, color = "darkgreen", col.regions = "green", alpha.regions = .05)
-```
+mapview(fi_regions): Esta función crea un mapa interactivo utilizando los datos espaciales almacenados en fi_regions.
+label = fi_regions$name: Cada polígono en el mapa se etiquetará con el valor correspondiente de la columna "name" en los datos.
+color = "darkgreen", col.regions = "green", alpha.regions = .05: Estos argumentos se utilizan para personalizar la apariencia del mapa, definiendo el color del borde de los polígonos, el color de relleno y la transparencia del relleno, respectivamente.
 
 
-mapview: Esta es la función principal de la librería mapview. Toma un objeto espacial (como un sf o un SpatialPolygonsDataFrame) y crea un mapa interactivo.
-jurisdiccion: Este es el objeto espacial que deseas visualizar. Probablemente sea un sf que contiene la información geográfica de las jurisdicciones que quieres mostrar en el mapa.
-label = fi_regions$name:
 
-label: Este argumento especifica qué texto se mostrará al pasar el cursor sobre cada polígono del mapa.
-fi_regions$name: Aquí se asume que fi_regions es otro objeto espacial (o un data frame con información espacial) que contiene los nombres de las regiones. Al utilizar fi_regions$name, se está indicando que los nombres de las regiones de fi_regions se utilizarán como etiquetas en el mapa jurisdiccion.
-color = "darkgreen":
+# En resumen
 
-Este argumento establece el color del borde de cada polígono en el mapa. En este caso, todos los bordes serán de color verde oscuro.
-col.regions = "green":
+Este código completo realiza las siguientes tareas:
 
-Este argumento define el color de relleno de cada polígono. Todos los polígonos se rellenarán con un color verde.
-alpha.regions = .05:
+Conecta a un servidor WFS: Se establece una conexión a un servicio web que proporciona datos geográficos en formato vectorial.
 
-Este argumento controla la transparencia del relleno de los polígonos. Un valor de 0 significa completamente transparente, y 1 significa completamente opaco. En este caso, los polígonos tendrán una transparencia del 5%, lo que permitirá ver capas subyacentes en el mapa.
+Descarga datos: Se descargan los datos de una capa específica (en este caso, "espacio01:tuc_juris") del servidor WFS.
+
+Crea un objeto espacial: Los datos descargados se convierten en un objeto espacial en R, lo que permite realizar análisis espaciales.
+
+Visualiza los datos: Los datos espaciales se muestran en un mapa interactivo, donde cada polígono está etiquetado con un nombre y tiene un estilo de color específico.
+
+En pocas palabras: este código te permite visualizar datos geográficos de un servidor remoto en un mapa interactivo utilizando R.
+
 
 
 

@@ -5,7 +5,8 @@ date: "2024-07-28"
 output: html_document
 ---
 
-## Recortar Archivo SHP
+## Extraer un objeto en SHP 
+o Recortar Archivo SHP
 
 Fuente: [Video de Youtube](https://www.youtube.com/watch?v=xBfuGQTAkuw)
 
