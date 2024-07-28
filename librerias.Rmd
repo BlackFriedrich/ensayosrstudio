@@ -1,0 +1,55 @@
+---
+title: "Librerias"
+author: "Federico Córdoba"
+date: "2024-07-28"
+output: html_document
+---
+
+# Navegación
+
+## Pacman
+
+*cargar y administrar múltiples paquetes, reemplaza library*
+
+Pacman es un paquete en R diseñado para simplificar la gestión de otros paquetes. En lugar de utilizar las funciones base de R como install.packages() y library(), pacman ofrece una interfaz más intuitiva y concisa para instalar, cargar y administrar múltiples paquetes.
+
+# Datos
+
+## Tydiverse
+
+*manipular datos*
+
+Tidyverse es un conjunto de paquetes en R diseñados para trabajar con datos de una manera más intuitiva y coherente.
+
+contiene:
+dplyr: El corazón de Tidyverse. Se utiliza para manipular datos de forma rápida y eficiente.
+ggplot2: Para crear gráficos de alta calidad y personalizados.
+tidyr: Para transformar datos de un formato ancho a largo o viceversa.
+readr: Para importar datos de forma rápida y eficiente.
+purrr: Para aplicar funciones a elementos de una lista o vector.
+tibble: Una versión mejorada de los data frames.
+stringr: Para manipular cadenas de texto.
+forcats: Para trabajar con factores.
+
+# Datos Espaciales
+
+## sf
+
+*Manejar datos espaciales | Importar WFS* 
+
+library(sf): 
+Esta línea carga la librería sf, que es fundamental para trabajar con datos espaciales en R. sf nos permite leer, manipular y analizar datos geográficos de manera eficiente.
+
+## mapview
+
+*Manejar datos espaciales | Importar WFS* 
+
+library(mapview):
+Cargamos la librería mapview para crear mapas interactivos de manera sencilla. Con esta librería, podremos visualizar nuestros datos espaciales en un mapa web.
+Construyendo la URL del servicio WFS
+
+## raster
+
+*manipulación de datos raster*
+
+La librería raster en R es una herramienta fundamental para el análisis y manipulación de datos raster en el entorno de RStudio

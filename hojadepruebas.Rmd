@@ -1,0 +1,77 @@
+---
+title: "Untitled"
+author: "Federico Córdoba"
+date: "2024-07-28"
+output: html_document
+---
+
+llamamos a las librerias
+
+```{r}
+library(sf)
+library(mapview)
+library(dplyr)
+```
+
+llamamos la información... se carga como valor
+
+```{r}
+baseurl <- "http://vport.herrera.unt.edu.ar:8894/geoserver/wfs?"
+wfs_request <- "request=GetFeature&service=WFS&version=2.0.0&typeName=espacio01:tuc_juris&outputFormat=application/json"
+
+fi_regions_wfs <- paste0(baseurl,wfs_request)
+```
+
+
+creamos una tabla a partir de esos valores...
+(data frame y sf , xq contiene a demas datos espaciales)
+
+```{r}
+fi_regions <- st_read(fi_regions_wfs)
+```
+revisamos la estructura del archivo ... para encontrar la columna que queremos considerar
+
+su estructura
+
+```{r}
+str(fi_regions)
+```
+la columna que nos interesa
+
+```{r}
+sort(unique(fi_regions$juris))
+```
+
+creamos la Data de la jurisdicción q nos interesa ...
+
+```{r}
+jurisdiccion <- fi_regions %>% 
+  filter(juris == "MUN. DE FAMAILLA")
+```
+
+creamos la visualización con el objeto utilizando mapview
+
+```{r}
+mapview(jurisdiccion, label = jurisdiccion$name, color = "darkgreen", col.regions = "green", alpha.regions = .05)
+```
+
+
+mapview: Esta es la función principal de la librería mapview. Toma un objeto espacial (como un sf o un SpatialPolygonsDataFrame) y crea un mapa interactivo.
+jurisdiccion: Este es el objeto espacial que deseas visualizar. Probablemente sea un sf que contiene la información geográfica de las jurisdicciones que quieres mostrar en el mapa.
+label = fi_regions$name:
+
+label: Este argumento especifica qué texto se mostrará al pasar el cursor sobre cada polígono del mapa.
+fi_regions$name: Aquí se asume que fi_regions es otro objeto espacial (o un data frame con información espacial) que contiene los nombres de las regiones. Al utilizar fi_regions$name, se está indicando que los nombres de las regiones de fi_regions se utilizarán como etiquetas en el mapa jurisdiccion.
+color = "darkgreen":
+
+Este argumento establece el color del borde de cada polígono en el mapa. En este caso, todos los bordes serán de color verde oscuro.
+col.regions = "green":
+
+Este argumento define el color de relleno de cada polígono. Todos los polígonos se rellenarán con un color verde.
+alpha.regions = .05:
+
+Este argumento controla la transparencia del relleno de los polígonos. Un valor de 0 significa completamente transparente, y 1 significa completamente opaco. En este caso, los polígonos tendrán una transparencia del 5%, lo que permitirá ver capas subyacentes en el mapa.
+
+
+
+
