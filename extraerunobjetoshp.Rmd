@@ -5,6 +5,49 @@ date: "2024-07-28"
 output: html_document
 ---
 
+# Codigo
+
+
+```{r}
+library(sf)
+library(mapview)
+library(dplyr)
+```
+
+```{r}
+baseurl <- "http://vport.herrera.unt.edu.ar:8894/geoserver/wfs?"
+wfs_request <- "request=GetFeature&service=WFS&version=2.0.0&typeName=espacio01:tuc_juris&outputFormat=application/json"
+
+fi_regions_wfs <- paste0(baseurl,wfs_request)
+```
+
+```{r}
+fi_regions <- st_read(fi_regions_wfs)
+```
+
+
+```{r}
+str(fi_regions)
+```
+
+
+```{r}
+sort(unique(fi_regions$juris))
+```
+
+
+```{r}
+jurisdiccion <- fi_regions %>% 
+  filter(juris == "MUN. DE FAMAILLA")
+```
+
+
+```{r}
+mapview(jurisdiccion, label = jurisdiccion$name, color = "darkgreen", col.regions = "green", alpha.regions = .05)
+```
+
+# Detalle del Código
+
 ## Extraer un objeto en SHP 
 o Recortar Archivo SHP
 

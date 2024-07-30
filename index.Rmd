@@ -1,0 +1,18 @@
+---
+title: "Indice"
+author: "Federico Córdoba"
+date: "2024-07-27"
+output: html_document
+---
+
+## [Librerías](librerias.html)
+
+## Pequeños Instructivos
+
+
+
+ * [Importar capa desde un WMS](importarwfs.html)
+ 
+ * [Extraer un objeto de esa capa](extraerunobjetoshp.html)
+ 
+ * [intersectar capas de servidores WMS](intersectarcapasshp.html)

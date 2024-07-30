@@ -48,6 +48,8 @@ library(mapview):
 Cargamos la librería mapview para crear mapas interactivos de manera sencilla. Con esta librería, podremos visualizar nuestros datos espaciales en un mapa web.
 Construyendo la URL del servicio WFS
 
+las BBOX funcionan con MAPVIEW....
+
 ## raster
 
 *manipulación de datos raster*
