@@ -37,7 +37,8 @@ su estructura
 ```{r}
 str(fi_regions)
 ```
-la columna que nos interesa
+
+desplegamos la columna que nos interesa para ver su información
 
 ```{r}
 sort(unique(fi_regions$juris))

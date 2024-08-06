@@ -16,3 +16,5 @@ output: html_document
  * [Extraer un objeto de esa capa](extraerunobjetoshp.html)
  
  * [intersectar capas de servidores WMS](intersectarcapasshp.html)
+ 
+ * [Cargar imágenes con enlaces](cargarimagenesconelances.html)

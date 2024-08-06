@@ -5,26 +5,143 @@ date: "2024-07-28"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Nombre
+dgct:PARCELAS_LEGALR
+Fuente
+pagingEnabled='true' preferCoordinatesForWfsT11='false' restrictToRequestBBOX='1' srsname='EPSG:5345' typename='dgct:PARCELAS_LEGALR' url='http://190.221.181.227/geoserver/dgct/wfs' version='auto'
+Proveedor
+WFS
+
+
+### llamamos a las librerias
+
+```{r}
+library(sf)
+library(mapview)
+library(dplyr)
 ```
 
-## R Markdown
+### llamamos la información del entorno ... se carga como valor
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
+baseurl <- "http://vport.herrera.unt.edu.ar:8894/geoserver/wfs?"
+wfs_request <- "request=GetFeature&service=WFS&version=2.0.0&typeName=espacio01:tuc_juris&outputFormat=application/json"
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+fi_regions_wfs <- paste0(baseurl,wfs_request)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+### creamos una tabla a partir de esos valores...
+(data frame y sf , xq contiene a demas datos espaciales)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+fi_regions <- st_read(fi_regions_wfs)
+```
+### revisamos la estructura del archivo ... para encontrar la columna que queremos considerar
+
+su estructura
+
+```{r}
+str(fi_regions)
+```
+desplegamos la columna que nos interesa para ver su información
+
+```{r}
+sort(unique(fi_regions$juris))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### creamos la Data de la jurisdicción (unidad) q nos interesa ...
+
+```{r}
+jurisdiccion <- fi_regions %>% 
+  filter(juris == "MUN. DE FAMAILLA")
+```
+
+### creamos la visualización con el objeto utilizando mapview
+
+```{r}
+mapview(jurisdiccion, label = jurisdiccion$name, color = "darkgreen", col.regions = "green", alpha.regions = .05)
+```
+
+### Traemos las capas que deseamos interceptar ****
+
+en este caso un sho ingresado en la DAta cargado con exito
+```{r}
+parcelas<-st_read("Dir. Catastro Parcelas/dgct_parcelas.shp",
+                 stringsAsFactors =TRUE,
+                 options ="ENCODING=UTF-8")
+```
+
+```{r}
+mapview(parcelas_recortadas, label = parcelas_recortadas$PADRON, color = "darkgreen", col.regions = "green", alpha.regions = .05)
+```
+
+
+### Interceptamos con la unidad
+### PRUEBA DE VISUALIZACIÓN CON BBOX desde la migración (NO FUNCIONÓ) 
+----------------------------
+pero si para recortar el objeto con problemas: (cod)
+
+
+#unificacion del sistema de coordenadas (CRS) ya  quno está en wgs 84 y el otro en EPSG 5340, usamos el EPSG 5340 q es el posgar 2007 / 3 que es mas preciso.
+jurisdiccion_2 <- st_transform(jurisdiccion, st_crs(fi_regions_rios))
+
+# Crear el bbox a partir de la capa jurisdicción
+bbox_jurisdiccion <- st_bbox(jurisdiccion_2)
+
+# Filtrar los ríos que intersecan con el bbox
+rios_en_jurisdiccion <- st_intersection(fi_regions_rios, st_as_sfc(bbox_jurisdiccion))
+
+# Visualizar ambas capas en el mismo mapa
+mapview(jurisdiccion) + mapview(rios_en_jurisdiccion, color = "blue")
+
+-----------------------
+
+# NOTA 
+
+como st_read sólo me permite leer los formatos, unificando los mismos, y map view visualizarlos. al parecer las capas no estan en condiciones de ser sometidas a geoprocesos. lo podemos ver al detectar el error (cuando queremos hacer la intersección)
+
+
+"Error in UseMethod("st_intersection") : 
+  no applicable method for 'st_intersection' applied to an object of class "character""
+  
+  y verificar usando class() que ambos son data.frame
+  
+  por lo que debemos convertir el data.frame en un archivo sf.
+  
+  
+  
+```{r}
+#unificacion del sistema de coordenadas (CRS) ya  quno está en wgs 84 y el otro en EPSG 5340, usamos el EPSG 5340 q es el posgar 2007 / 3 que es mas preciso.
+jurisdiccion_2 <- st_transform(jurisdiccion, st_crs(parcelas))
+```
+
+
+```{r}
+#convertimos los archivos de data frame (df) a sf (formato q contiene georeferencias) identificando la columna q contiene su geometría.
+sf_obj_juris <- st_as_sf(jurisdiccion_2, geometry = "geometry")
+sf_obj_parcelas <- st_as_sf(parcelas, geometry = "geometry")
+```
+
+
+
+```{r}
+parcelas_recortadas <- st_intersection(sf_obj_parcelas, sf_obj_juris)
+```
+```{r}
+library(tidyverse)
+library(sf)
+```
+
+
+```{r}
+ggplot()+
+  geom_sf(data=parcelas_recortadas)
+```
+
+
+
+
+
+
+

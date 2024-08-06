@@ -1,0 +1,61 @@
+---
+title: "Untitled"
+author: "Federico Córdoba"
+date: "2024-08-06"
+output: html_document
+---
+[![Imagen Descriptiva](imagen.png)](https://github.com/BlackFriedrich/spatialdataportal.html)
+
+------------------
+
+<div style="display: flex; justify-content: space-around;">
+
+<a href="https://github.com/BlackFriedrich/spatialdataportal.html">
+  <img src="imagen.png" alt="Imagen 1" style="width: 20%;"/>
+</a>
+
+<a href="https://github.com/BlackFriedrich/spatialdataportal.html">
+  <img src="imagen.png" alt="Imagen 2" style="width: 20%;"/>
+</a>
+
+<a href="https://github.com/BlackFriedrich/spatialdataportal.html">
+  <img src="imagen.png" alt="Imagen 3" style="width: 20%;"/>
+</a>
+
+<a href="https://github.com/BlackFriedrich/spatialdataportal.html">
+  <img src="imagen.png" alt="Imagen 4" style="width: 20%;"/>
+</a>
+
+</div>
+
+
+
+---------------------
+
+------------------
+
+<div style="display: flex; justify-content: space-around;text-align: center;">
+
+<a href="https://github.com/BlackFriedrich/spatialdataportal.html">
+  <img src="imagen.png" alt="Imagen 1" style="width: 20%;"/>
+  <div>Imagen 1</div>
+</a>
+
+<a href="https://github.com/BlackFriedrich/spatialdataportal.html">
+  <img src="imagen.png" alt="Imagen 2" style="width: 20%;"/>
+  <div>Imagen 1</div>
+</a>
+
+<a href="https://github.com/BlackFriedrich/spatialdataportal.html">
+  <img src="imagen.png" alt="Imagen 3" style="width: 20%;"/>
+  <div>Imagen 1</div>
+</a>
+
+<a href="https://github.com/BlackFriedrich/spatialdataportal.html">
+  <img src="imagen.png" alt="Imagen 4" style="width: 20%;"/>
+  <div>Imagen 1</div>
+</a>
+
+</div>
+----------------
+
