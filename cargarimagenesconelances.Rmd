@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Cargar imágenes con links"
 author: "Federico Córdoba"
 date: "2024-08-06"
 output: html_document
