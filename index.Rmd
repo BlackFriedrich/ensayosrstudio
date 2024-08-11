@@ -18,3 +18,5 @@ output: html_document
  * [intersectar capas de servidores WMS](intersectarcapasshp.html)
  
  * [Cargar imágenes con enlaces](cargarimagenesconelances.html)
+ 
+ * [Descargar límites municipales de Open Street Map](descargarlimitemunicipal.html)
