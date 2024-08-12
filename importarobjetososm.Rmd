@@ -1,0 +1,89 @@
+---
+title: "Untitled"
+author: "Federico Córdoba"
+date: "2024-08-11"
+output: html_document
+---
+
+Te mostraré cómo crear un archivo RMarkdown (.Rmd) en RStudio que:
+
+Obtenga los límites del municipio "Banda del Río Salí" en Tucumán, Argentina, desde OpenStreetMap.
+Visualice estos límites en un mapa usando la librería leaflet.
+Obtenga los establecimientos educativos dentro de este municipio y los visualice en un segundo mapa.
+
+### Mapa de los Límites de Banda del Río Salí
+
+
+En este apartado, obtendremos los límites administrativos del municipio Banda del Río Salí en Tucumán, Argentina, y los visualizaremos en un mapa.
+
+```{r}
+# Cargar las librerías necesarias
+library(osmdata)
+library(sf)
+library(leaflet)
+
+# Define el nombre del municipio
+municipio <- "Banda del Río Salí, Tucumán, Argentina"
+
+# Crear la consulta a OSM para obtener los límites administrativos
+query <- opq(bbox = municipio) %>%
+  add_osm_feature(key = "boundary", value = "administrative") %>%
+  add_osm_feature(key = "name", value = "Banda del Río Salí")
+
+# Obtener los datos en formato sf
+osm_data <- osmdata_sf(query)
+
+# Extraer los límites administrativos (multipolígonos)
+limites_municipio <- osm_data$osm_multipolygons
+
+# Comprobar si se han obtenido datos
+if (nrow(limites_municipio) > 0) {
+  # Crear un mapa utilizando leaflet
+  leaflet(data = limites_municipio) %>%
+    addTiles() %>%
+    addPolygons(color = "blue", weight = 2, fillColor = "lightblue", fillOpacity = 0.5) %>%
+    addPopups(~st_coordinates(geometry)[1,1], ~st_coordinates(geometry)[1,2], "Banda del Río Salí")
+} else {
+  print("No se encontraron límites para el municipio especificado.")
+}
+```
+
+
+
+###  Mapa de los Establecimientos Educativos en Banda del Río Salí
+
+
+Ahora, obtendremos los establecimientos educativos dentro del municipio Banda del Río Salí y los visualizaremos en un segundo mapa.
+
+
+```{r echo=TRUE}
+# Crear la consulta a OSM para obtener los establecimientos educativos
+query_educacion <- opq(bbox = municipio) %>%
+  add_osm_feature(key = "amenity", value = "school")
+
+# Obtener los datos en formato sf
+osm_educacion <- osmdata_sf(query_educacion)
+
+# Extraer los puntos de los establecimientos educativos
+escuelas <- osm_educacion$osm_points
+
+# Comprobar si se han obtenido datos
+if (nrow(escuelas) > 0) {
+  # Crear un mapa utilizando leaflet
+  leaflet(data = escuelas) %>%
+    addTiles() %>%
+    addCircleMarkers(radius = 5, color = "red", stroke = FALSE, fillOpacity = 0.7, 
+                     label = ~paste("Escuela:", name)) %>%
+    addPopups(~st_coordinates(geometry)[,1], ~st_coordinates(geometry)[,2], "Establecimiento Educativo")
+} else {
+  print("No se encontraron establecimientos educativos para el municipio especificado.")
+}
+```
+```{r}
+ leaflet(data = escuelas) %>%
+    addTiles() %>%
+    addCircleMarkers(radius = 5, color = "red", stroke = FALSE, fillOpacity = 0.7, 
+                     label = ~paste("Escuela:", name)) %>%
+    addPopups(~st_coordinates(geometry)[,1], ~st_coordinates(geometry)[,2], "Establecimiento Educativo")
+```
+

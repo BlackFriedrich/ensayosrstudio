@@ -19,4 +19,10 @@ output: html_document
  
  * [Cargar imágenes con enlaces](cargarimagenesconelances.html)
  
- * [Descargar límites municipales de Open Street Map](descargarlimitemunicipal.html)
+ * [Descargar límites municipales de Open Street Map (OSM) ](descargarlimitemunicipal.html)
+ 
+ * [Creamos un recuadro (bbox) para los limites municipales](crearbboxmunicipio.html) 
+ 
+ * [Importamos objetos de Open Street Map (OSM)](importarobjetososm.html) 
+ 
+ 
