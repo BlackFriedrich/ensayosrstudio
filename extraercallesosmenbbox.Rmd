@@ -1,0 +1,138 @@
+---
+title: "Untitled"
+author: "Federico Córdoba"
+date: "2024-08-14"
+output: html_document
+---
+
+Visualizacion de mapas 
+
+
+### Mapa de los Límites del Municipio
+
+En este apartado, obtendremos los límites administrativos del municipio y los visualizaremos en un mapa.
+
+```{r}
+# Cargar las librerías necesarias
+library(osmdata)
+library(sf)
+library(ggplot2)
+
+# Define el nombre del municipio que deseas obtener
+municipio <- "Las Talitas, Los Pocitos, Departamento Tafí Viejo, Tucumán, T4103, Argentina"
+
+# Crear la consulta a OSM
+query <- opq(bbox = municipio) %>%
+  add_osm_feature(key = "boundary", value = "administrative") %>%
+  add_osm_feature(key = "name", value = "Las Talitas")
+
+# Obtener los datos en formato sf
+osm_data <- osmdata_sf(query)
+
+# Comprobar si se han obtenido polígonos (limites administrativos)
+if (!is.null(osm_data$osm_multipolygons) && nrow(osm_data$osm_multipolygons) > 0) {
+  limites_municipio <- osm_data$osm_multipolygons
+
+  # Plotear los límites del municipio
+  ggplot(data = limites_municipio) +
+    geom_sf(fill = "lightblue", color = "darkblue") +
+    ggtitle("Límites del Municipio") +
+    theme_minimal()
+  
+} else {
+  print("No se encontraron límites para el municipio especificado.")
+}
+```
+## Opción 1 usando ggplot
+
+
+```{r}
+  # Plotear los límites del municipio
+  ggplot(data = limites_municipio) +
+    geom_sf(fill = "lightblue", color = "darkblue") +
+    ggtitle("Límites del Municipio") +
+    theme_minimal()
+```
+
+## Opción 2 usando map view en una vista minimalista
+
+
+```{r}
+library(mapview)
+
+mapview(limites_municipio, label = limites_municipio$name, color = "red", col.regions = "red", alpha.regions = .05)
+```
+
+## Opción 3 usando map view con la vista de OpenstreetMap
+
+```{r}
+library(mapview)
+
+mapview(limites_municipio, label = limites_municipio$name, color = "red", col.regions = "red", alpha.regions = .05, map.types = "OpenStreetMap")
+```
+
+## Opción 4 usando leaflet con la vista de fondeo de GeoAr
+
+```{r}
+library(leaflet)
+library(geoAr)
+
+# Transformar a CRS adecuado si es necesario
+limites_municipio <- st_transform(limites_municipio, crs = 4326)
+
+# Centrar el mapa en los límites del municipio
+centro <- st_centroid(st_union(limites_municipio))
+
+# Crear el mapa nuevamente
+leaflet(limites_municipio) %>%
+  addTiles() %>%  # Añadir un fondo de mapa base
+  geoAr::addArgTiles() %>%  # Añadir los tiles de Argentina
+  addPolygons(fillColor = "blue", fillOpacity = 0.5, color = "black", weight = 2, 
+              label = ~name) %>%  # Cambiar colores y aumentar opacidad
+  setView(lng = st_coordinates(centro)[1], lat = st_coordinates(centro)[2], zoom = 13)
+```
+
+
+###  Mapa de los Establecimientos Educativos en Banda del Río Salí
+
+
+Ahora, obtendremos los establecimientos educativos dentro del municipio Banda del Río Salí y los visualizaremos en un segundo mapa.
+
+
+```{r echo=TRUE}
+# Crear la consulta a OSM para obtener los establecimientos educativos
+query_vial <- opq(bbox = municipio) %>%
+  add_osm_feature(key = "highway")
+```
+
+```{r echo=TRUE}
+# Obtener los datos en formato sf
+osm_vial <- osmdata_sf(query_vial)
+```
+
+```{r echo=TRUE}
+# Extraer los puntos de los establecimientos educativos <<<<<<<<<<<<<
+vial <- osm_vial$osm_lines
+```
+
+```{r echo=TRUE}
+# Comprobar si se han obtenido datos
+if (nrow(vial) > 0) {
+  # Crear un mapa utilizando leaflet
+  leaflet(data = vial) %>%
+    addTiles() %>%
+    addPolylines(color = "blue", weight = 2)
+} else {
+  print("No se encontraron establecimientos educativos para el municipio especificado.")
+}
+```
+
+# guardamos las calles en geojson, q es un formato de archivo unico y liviano
+
+```{r}
+st_write(vial, "datavial.geojson")
+```
+
+
+
+st_write(vial, "datavial.geojson")

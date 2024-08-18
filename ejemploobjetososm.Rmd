@@ -1,0 +1,34 @@
+---
+title: "Untitled"
+author: "Federico Córdoba"
+date: "2024-08-12"
+output: html_document
+---
+
+
+```{r}
+library(osmdata)
+library(sf)
+```
+
+```{r}
+# Definir el área de interés (puedes usar un bbox)
+bbox <- c(xmin = -65.2100, ymin = -26.8400, xmax = -65.1800, ymax = -26.8100)  # Ejemplo para una zona en Tucumán, Argentina
+
+# Crear la consulta a OSM para obtener los edificios
+query <- opq(bbox = bbox) %>%
+  add_osm_feature(key = "building")
+
+# Descargar los datos en formato sf
+buildings <- osmdata_sf(query)$osm_polygons
+
+# Verificar los datos descargados
+print(buildings)
+```
+
+```{r}
+library(mapview)
+
+mapview(buildings, color = "red", col.regions = "red", alpha.regions = .05)
+```
+

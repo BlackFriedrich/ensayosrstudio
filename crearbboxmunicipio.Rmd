@@ -78,3 +78,28 @@ leaflet() %>%
          zoom = 13)
 ```
 
+
+ahora utlizando el mapa de GeoAR:
+
+```{r}
+library(leaflet)
+
+# Suponiendo que bbox_municipio es un objeto con las coordenadas del municipio
+
+leaflet() %>%
+  addTiles() %>%
+  addRectangles(
+    lng1 = bbox_municipio[1], lat1 = bbox_municipio[2],
+    lng2 = bbox_municipio[3], lat2 = bbox_municipio[4],
+    color = "blue", weight = 3
+  ) %>%
+  addMarkers(
+    lng = mean(c(bbox_municipio[1], bbox_municipio[3])),
+    lat = mean(c(bbox_municipio[2], bbox_municipio[4])),
+    popup = "Centro del municipio"
+  ) %>%
+  setView(lng = mean(c(bbox_municipio[1], bbox_municipio[3])),
+         lat = mean(c(bbox_municipio[2], bbox_municipio[4])),
+         zoom = 13) %>%
+  geoAr::addArgTiles()
+```

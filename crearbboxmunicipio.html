@@ -4458,8 +4458,31 @@ leaflet() %&gt;%
   setView(lng = mean(c(bbox_municipio[1], bbox_municipio[3])),
          lat = mean(c(bbox_municipio[2], bbox_municipio[4])),
          zoom = 13)</code></pre>
-<div class="leaflet html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-db6089bdd8a20b0ea33d" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-db6089bdd8a20b0ea33d">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addRectangles","args":[-26.7963124,-65.2178269,-26.7301359,-65.1549021,null,null,{"interactive":true,"className":"","stroke":true,"color":"blue","weight":3,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addMarkers","args":[-26.76322415,-65.1863645,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Centro del municipio",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[-26.7963124,-26.7301359],"lng":[-65.2178269,-65.1549021]},"setView":[[-26.76322415,-65.1863645],13,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-a0854475720a76293591" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-a0854475720a76293591">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addRectangles","args":[-26.7963124,-65.2178269,-26.7301359,-65.1549021,null,null,{"interactive":true,"className":"","stroke":true,"color":"blue","weight":3,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addMarkers","args":[-26.76322415,-65.1863645,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Centro del municipio",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[-26.7963124,-26.7301359],"lng":[-65.2178269,-65.1549021]},"setView":[[-26.76322415,-65.1863645],13,[]]},"evals":[],"jsHooks":[]}</script>
+<p>ahora utlizando el mapa de GeoAR:</p>
+<pre class="r"><code>library(leaflet)
+
+# Suponiendo que bbox_municipio es un objeto con las coordenadas del municipio
+
+leaflet() %&gt;%
+  addTiles() %&gt;%
+  addRectangles(
+    lng1 = bbox_municipio[1], lat1 = bbox_municipio[2],
+    lng2 = bbox_municipio[3], lat2 = bbox_municipio[4],
+    color = &quot;blue&quot;, weight = 3
+  ) %&gt;%
+  addMarkers(
+    lng = mean(c(bbox_municipio[1], bbox_municipio[3])),
+    lat = mean(c(bbox_municipio[2], bbox_municipio[4])),
+    popup = &quot;Centro del municipio&quot;
+  ) %&gt;%
+  setView(lng = mean(c(bbox_municipio[1], bbox_municipio[3])),
+         lat = mean(c(bbox_municipio[2], bbox_municipio[4])),
+         zoom = 13) %&gt;%
+  geoAr::addArgTiles()</code></pre>
+<div class="leaflet html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-5caca4d9585a1ccf57a9" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-5caca4d9585a1ccf57a9">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addRectangles","args":[-26.7963124,-65.2178269,-26.7301359,-65.1549021,null,null,{"interactive":true,"className":"","stroke":true,"color":"blue","weight":3,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addMarkers","args":[-26.76322415,-65.1863645,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Centro del municipio",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addTiles","args":["https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false}]}],"limits":{"lat":[-26.7963124,-26.7301359],"lng":[-65.2178269,-65.1549021]},"setView":[[-26.76322415,-65.1863645],13,[]]},"evals":[],"jsHooks":[]}</script>
 
 
 

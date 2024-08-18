@@ -13,16 +13,39 @@ output: html_document
 
  * [Importar capa desde un WMS](importarwfs.html)
  
+ * [Importar datos csv y geojson de drive](importararchivosdrive.html)
+ 
  * [Extraer un objeto de esa capa](extraerunobjetoshp.html)
  
  * [intersectar capas de servidores WMS](intersectarcapasshp.html)
  
  * [Cargar imágenes con enlaces](cargarimagenesconelances.html)
  
+ ### DATOS OSM
+ 
  * [Descargar límites municipales de Open Street Map (OSM) ](descargarlimitemunicipal.html)
  
  * [Creamos un recuadro (bbox) para los limites municipales](crearbboxmunicipio.html) 
  
  * [Importamos objetos de Open Street Map (OSM)](importarobjetososm.html) 
+
+ * [Importamos calles de Open Street Map (OSM)](extraercallesosmenbbox.html) 
+ 
+ * [Importamos amenitys de Open Street Map (OSM)](extraeramenityenbbox.html) 
+ 
+ *** [ejemplo de liberia para traer un mapa de fondo minimalista](ejemploleafletygeoar.html) 
+ 
+ * [Visualización en múltiples fondos de mapas](fondosdemapas.html) 
+ 
+  *** [ejemplo de limitaciones para obtener edificios, manzanas o parcelas de OSM](ejemploobjetososm.html) 
+ 
+ 
+ * [filtramos csv muy pesado con la info importante de un bbox](filtramosdatosdentrodebbox.html)
+ 
+ extraeramenityenbbox
+ 
+
+ 
+ 
  
  

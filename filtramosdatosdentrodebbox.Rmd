@@ -1,0 +1,124 @@
+---
+title: "Untitled"
+author: "Federico Córdoba"
+date: "2024-08-14"
+output: html_document
+---
+
+Visualizar un bbox de un municipio
+
+Fuente: [https://www.openstreetmap.org/](https://www.openstreetmap.org)
+
+Buscar el Municipio, corroborar el polígono y copiar el nombre correctamente en caso de confirmarlo.
+
+```{r}
+# Cargar las librerías necesarias
+library(osmdata)
+library(sf)
+library(ggplot2)
+
+# Define el nombre del municipio que deseas obtener
+municipio <- "Las Talitas, Los Pocitos, Departamento Tafí Viejo, Tucumán, T4103, Argentina"
+
+# Crear la consulta a OSM
+query <- opq(bbox = municipio) %>%
+  add_osm_feature(key = "boundary", value = "administrative") %>%
+  add_osm_feature(key = "name", value = "Las Talitas")
+
+# Obtener los datos en formato sf
+osm_data <- osmdata_sf(query)
+
+# Comprobar si se han obtenido polígonos (limites administrativos)
+if (!is.null(osm_data$osm_multipolygons) && nrow(osm_data$osm_multipolygons) > 0) {
+  limites_municipio <- osm_data$osm_multipolygons
+
+  # Plotear los límites del municipio
+  ggplot(data = limites_municipio) +
+    geom_sf(fill = "lightblue", color = "darkblue") +
+    ggtitle("Límites del Municipio de Las Talitas, Tucumán") +
+    theme_minimal()
+  
+} else {
+  print("No se encontraron límites para el municipio especificado.")
+}
+```
+
+
+```{r}
+bbox_municipio <- getbb(municipio)
+```
+
+Agregamos una visualización de la BBOX creada ....
+
+```{r}
+library(leaflet)
+
+# Suponiendo que bbox_municipio es un objeto con las coordenadas del municipio
+
+leaflet() %>%
+  addTiles() %>%
+  addRectangles(
+    lng1 = bbox_municipio[1], lat1 = bbox_municipio[2],
+    lng2 = bbox_municipio[3], lat2 = bbox_municipio[4],
+    color = "blue", weight = 3
+  ) %>%
+  addMarkers(
+    lng = mean(c(bbox_municipio[1], bbox_municipio[3])),
+    lat = mean(c(bbox_municipio[2], bbox_municipio[4])),
+    popup = "Centro del municipio"
+  ) %>%
+  setView(lng = mean(c(bbox_municipio[1], bbox_municipio[3])),
+         lat = mean(c(bbox_municipio[2], bbox_municipio[4])),
+         zoom = 13)
+```
+
+# traemos los datos para hacer el ejercicio
+
+```{r}
+datos <- read.csv("data/buildings.csv")
+```
+
+
+```{r}
+bbox_municipio
+```
+```{r}
+head(datos)
+```
+```{r}
+library(dplyr)
+```
+
+```{r}
+datos_filtrados <- datos %>%
+  filter(longitude >= bbox_municipio[1] & longitude <= bbox_municipio[3] &
+         latitude >= bbox_municipio[2] & latitude <= bbox_municipio[4])
+```
+
+
+visualización
+
+```{r}
+library(ggplot2)
+
+# Asumiendo que 'limites_municipio' es un objeto sf y 'datos_filtrados' es un dataframe
+
+ggplot() +
+  geom_sf(data = limites_municipio, fill = "lightblue", color = "darkblue") +
+  geom_point(data = datos_filtrados, aes(x = longitude, y = latitude)) +
+  coord_sf() +  # Asegurarse de que las coordenadas sean manejadas correctamente
+  ggtitle("Límites del Municipio de Las Talitas, Tucumán y Datos Filtrados") +
+  theme_minimal()
+```
+
+
+# guardamos los datos correspondientes al bbox
+
+
+```{r}
+write.csv(datos_filtrados, file = "datos_municipio.csv", row.names = FALSE)
+```
+
+
+
+

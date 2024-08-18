@@ -16,8 +16,8 @@ library(mapview)
 ```
 
 ```{r}
-baseurl <- "http://vport.herrera.unt.edu.ar:8894/geoserver/wfs?"
-wfs_request <- "request=GetFeature&service=WFS&version=2.0.0&typeName=espacio01:tuc_juris&outputFormat=application/json"
+baseurl <- "http://190.221.181.227/geoserver/dgct/wfs?"
+wfs_request <- "request=GetFeature&service=WFS&version=2.0.0&typeName=dgct:parcelass&outputFormat=application/json"
 
 fi_regions_wfs <- paste0(baseurl,wfs_request)
 ```

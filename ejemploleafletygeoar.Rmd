@@ -1,0 +1,36 @@
+---
+title: "Untitled"
+author: "Federico Córdoba"
+date: "2024-08-12"
+output: html_document
+---
+
+
+```{r}
+library(leaflet)
+```
+
+
+
+```{r}
+leaflet() %>% 
+    #Dibuja MARCADOR 
+  addMarkers(lng = -58.4469439, -34.5480059) %>%  
+   #Agrega fondo con otro TILE
+  geoAr::addArgTiles()
+```
+leaflet():
+
+Esta función inicializa un objeto leaflet en R, que es la base para crear un mapa interactivo. Es el primer paso para construir un mapa usando la librería leaflet.
+%>%:
+
+Este es el operador de tuberías de magrittr (o dplyr), que se utiliza para encadenar funciones. Permite pasar el resultado de una función directamente como entrada a la siguiente función.
+addMarkers(lng = -58.4469439, lat = -34.5480059):
+
+addMarkers: Esta función añade un marcador en el mapa en una ubicación específica, definida por las coordenadas de longitud (lng) y latitud (lat).
+lng = -58.4469439, lat = -34.5480059: Estas son las coordenadas geográficas para la ubicación del marcador. En este caso, las coordenadas corresponden aproximadamente a una ubicación en Buenos Aires, Argentina.
+geoAr::addArgTiles():
+
+geoAr::addArgTiles(): Esta función proviene del paquete geoAr, que está diseñado para trabajar con mapas de Argentina en R. addArgTiles agrega un fondo de mapa específico de Argentina al mapa leaflet. Esto reemplaza o complementa el fondo predeterminado del mapa con un conjunto de tiles (fragmentos de mapa) que muestran datos geoespaciales específicos de Argentina.
+Resumen
+Este código crea un mapa interactivo con leaflet, coloca un marcador en una ubicación específica en Buenos Aires, Argentina, y luego agrega un fondo de mapa que es específico de Argentina, proporcionado por el paquete geoAr. El uso del operador de tuberías (%>%) permite encadenar estas operaciones de manera fluida.

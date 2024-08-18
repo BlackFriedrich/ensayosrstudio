@@ -1,0 +1,55 @@
+---
+title: "Untitled"
+author: "Federico Córdoba"
+date: "2024-08-18"
+output: html_document
+---
+
+prueba con un archivo csv alojado en drive
+
+
+```{r}
+# Cargar las librerías necesarias
+library(readr)
+library(dplyr)
+
+# URL del archivo CSV
+url <- "https://drive.google.com/uc?export=download&id=1Gjsmy4CnotEiRNPKLI-eJi5QoiOaB0qj"
+
+# Importar el archivo CSV desde la web
+datos <- read_csv(url)
+
+# Mostrar una vista previa de los datos
+head(datos)
+```
+
+
+prueba con un archivo geojson
+
+```{r}
+# Cargar las librerías necesarias
+library(sf)
+library(dplyr)
+
+# URL del archivo GeoJSON
+url <- "https://drive.google.com/uc?export=download&id=1GhW4ngOLdj-wP53W-Tu4M4iqUoj2huqH"  # Reemplaza con la URL real
+
+# Importar el archivo GeoJSON desde la web
+datos_geojson <- st_read(url)
+
+# Mostrar una vista previa de los datos
+head(datos_geojson)
+
+# Mostrar la estructura de los datos
+str(datos_geojson)
+```
+
+```{r}
+library(leaflet)
+leaflet(data = datos_geojson) %>%
+    addTiles() %>%
+    addPolylines(color = "blue", weight = 2)
+```
+
+
+
